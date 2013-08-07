@@ -1,4 +1,35 @@
-import processing.core.*; import pitaru.sonia_v2_9.*; import java.applet.*; import java.awt.*; import java.awt.image.*; import java.awt.event.*; import java.io.*; import java.net.*; import java.text.*; import java.util.*; import java.util.zip.*; public class JBallDroppings extends PApplet {
+/*
+
+  BallDroppings
+  
+  Musical Bouncy Ball Software Art from 2003 
+  
+  (c) by jtnimoy
+
+  Instructions are at the original balldroppings website ( http://www.balldroppings.com )
+  All key controls explained on that page will work in the applet except for
+  the telnet server, file IO, and Space only clears everything. There is no
+  Ctrl+Space and Shift+Space for specifically clearing balls or lines.
+
+
+  Ported to Java for FACT comission
+  Licensed under Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+  
+  Source hosted on github:
+  https://github.com/jtnimoy/BallDroppings
+
+  You can run it inside the Processing 1.5.1 or Processing 2.0 IDE,
+  or export it to run as a web-applet.
+  
+  The required libraries are included inside the code folder:
+  - Jsyn beta 16.6.14
+  - Sonia 2.9 
+ 
+*/
+
+
+import pitaru.sonia_v2_9.*;
+import java.util.Vector;
 
 //static FSOUND_SAMPLE *sound1;
 float freq;
@@ -65,7 +96,7 @@ public  void setFriction(float f){
 
 
 
-public void initSound(){
+void initSound(){
  /*
  if(!FSOUND_Init(48000, 1024, FSOUND_INIT_GLOBALFOCUS)){
  printf("%s\n",FMOD_ErrorString(FSOUND_GetError()));
@@ -73,13 +104,13 @@ public void initSound(){
  Sonia.start(this);
  sounds = new Sample[8];
  for(int i=0;i<8;i++){
-   sounds[i] = new Sample("sine.aiff");
+   sounds[i] = new Sample("sine.wav");
  }
  sounds_ptr = 0;
 }
 
 
-public void playSound(long rate){
+void playSound(long rate){
   sounds[sounds_ptr].setRate(rate);
   sounds[sounds_ptr].play();
   sounds_ptr++;
@@ -88,7 +119,7 @@ public void playSound(long rate){
 }
 
 
-public void setup(){
+void setup(){
 
   size(300,200);
   oldMouseX = -1;
@@ -116,7 +147,7 @@ public void stop(){
   super.stop();
 }
 
-public void draw(){
+void draw(){
   background(0);
   int i;
   newball_xlag += (newball_x - newball_xlag)/10.0f;
@@ -341,7 +372,7 @@ public void draw(){
 
 }
 //------------------------------------------------------------------------
-public void keyPressed(){
+void keyPressed(){
 
   int k = key;
 
@@ -403,10 +434,10 @@ public void keyPressed(){
     System.out.println("load from file not implemented in Java version");
   } 
   else if(k=='r'){
-    setFrequencyRange(frequencyRange()/1.09f);
+    setFrequencyRange(frequencyRange()/1.09);
   } 
   else if(k=='R'){
-    setFrequencyRange(frequencyRange()*1.09f);
+    setFrequencyRange(frequencyRange()*1.09);
   } 
   else if(k=='f'){
     setFriction(friction()+0.0001f);
@@ -415,10 +446,10 @@ public void keyPressed(){
     setFriction(friction()-0.0001f);
   } 
   else if(k=='g'){
-    gravity-=0.001f;
+    gravity-=0.001;
   } 
   else if(k=='G'){
-    gravity+=0.001f;
+    gravity+=0.001;
   } 
   else if(k=='e'||k=='E'){
     deletePickedVertex();
@@ -449,7 +480,7 @@ public void keyPressed(){
 
 
 
-public void mousePressed(){
+void mousePressed(){
   
   
   if(closestLineDistance < closestLine_maxPickingDistance){
@@ -504,7 +535,7 @@ public void mousePressed(){
 }
 
 //------------------------------------------------------------------------
-public void mouseReleased(){
+void mouseReleased(){
   float xd = mouseX - lastMouseDownX;
   float yd = mouseY - lastMouseDownY;
   if (  mousestate_draggingvert==1){//then we had been dragging something else.
@@ -536,16 +567,16 @@ public void mouseReleased(){
 
 
 
-public void resetBalls(){
+void resetBalls(){
   balls.removeAllElements();
   emptyBalls.removeAllElements();
 }
 
-public void resetLines(){
+void resetLines(){
   lines.removeAllElements();
 }
 
-public void resetVars(){
+void resetVars(){
   ball_drop_rate = 3000;
   setFriction(0.99997f);
   gravity = 0.01f;
@@ -559,7 +590,7 @@ public void resetVars(){
 
 
 
-public void deletePickedVertex(){
+void deletePickedVertex(){
   
   if( closestLineDistance < closestLine_maxPickingDistance){
     //register undoable
@@ -582,7 +613,7 @@ public void deletePickedVertex(){
 
 
 
-public int validLine(Line l){
+int validLine(Line l){
   int foundOne = 0;
   for(int i=0;i<lines.size();i++){
     if(lines.get(i)==((Object)l)){
@@ -596,10 +627,10 @@ public int validLine(Line l){
 
 
 
-public void newBall(){
+void newBall(){
   //load a new ball.
   Ball b = new Ball(newball_x,newball_y, balls.size());
-  b.applyForce(0.0001f,0);
+  b.applyForce(0.0001,0);
   //search for an empty spot in the list
   if(emptyBalls.size()>0){
 
@@ -614,7 +645,7 @@ public void newBall(){
 
 
 
-public void undo(){
+void undo(){
   if(undo_busy!=0){
     return;
   }else{
@@ -700,7 +731,7 @@ class Ball {
     initMem();
   }
   //----------------------------------------------------
-  public void initMem(){
+  void initMem(){
     oldX = x = 0;
     oldY = y = 0;
     forceX = 0;
@@ -743,27 +774,27 @@ class Ball {
   }
   */
   //----------------------------------------------------
-  public float getOldX(){
+  float getOldX(){
     return oldX;
   }
   //----------------------------------------------------
-  public float getOldY(){
+  float getOldY(){
     return oldY;
   }//----------------------------------------------------
-  public float getX(){
+  float getX(){
     return x;
   }
   //----------------------------------------------------
-  public float getY(){
+  float getY(){
     return y;
   }
   //----------------------------------------------------
-  public void setPos(float _x,float _y){
+  void setPos(float _x,float _y){
     x = _x;
     y = _y;
   }
   //----------------------------------------------------
-  public void stepPhysics(){
+  void stepPhysics(){
     //apply the forces
     oldX = x;
     oldY = y;
@@ -774,15 +805,15 @@ class Ball {
     forceX *= friction();
     forceY *= friction();
 
-    if(jitter>0)jitter-=0.1f;  
+    if(jitter>0)jitter-=0.1;  
   }
   //----------------------------------------------------
-  public void applyForce(float applyX,float applyY){
+  void applyForce(float applyX,float applyY){
     forceX += applyX;
     forceY += applyY;
   }
   //----------------------------------------------------
-  public void reflectInDirection(float reflectAngle){
+  void reflectInDirection(float reflectAngle){
     //convert to polar
     float radius = getForceRadius();//pythagorean to find distance
     float theta = atan2(forceY,forceX);//atan2 to find theta
@@ -794,11 +825,11 @@ class Ball {
     forceY = radius * sin(theta);
   }
   //----------------------------------------------------
-  public float getForceRadius(){
+  float getForceRadius(){
     return sqrt(forceX*forceX+forceY*forceY);//pythag to find dist
   }
   //----------------------------------------------------
-  public void bounce(){
+  void bounce(){
     //volume = 255.0;
 
     for(int i=15;i>0;i--){//shift the queue
@@ -846,24 +877,24 @@ class Ball {
   }
 
   //----------------------------------------------------
-  public void amnesia(){
+  void amnesia(){
     oldX = x;
     oldY = y;
   }
   //----------------------------------------------------
-  public void rollBackOnePos(){
+  void rollBackOnePos(){
     x = oldX;
     y = oldY;
   }
   //----------------------------------------------------
-  public float getJitter(){
+  float getJitter(){
     return jitter;
   }
   //----------------------------------------------------------------------------
-  public float getForceX(){
+  float getForceX(){
     return forceX;
   }
-  public float getForceY(){
+  float getForceY(){
     return forceY;
   }
 
@@ -888,7 +919,7 @@ class Line {
     initMem();
   }
   //------------------------------------------------------------------------------
-  public void initMem(){
+  void initMem(){
     x1 = 0;
     y1 = 0;
     x2 = 0;
@@ -910,33 +941,33 @@ class Line {
 
   }*/
   //------------------------------------------------------------------------------
-  public float getX1(){
+  float getX1(){
     return x1;
   }
   //------------------------------------------------------------------------------
-  public float getY1(){
+  float getY1(){
     return y1;
   }
   //------------------------------------------------------------------------------
-  public float getX2(){
+  float getX2(){
     return x2;
   }
   //------------------------------------------------------------------------------
-  public float getY2(){
+  float getY2(){
     return y2;
   }
   //------------------------------------------------------------------------------
-  public void set1(float x,float y){
+  void set1(float x,float y){
     x1 = x;
     y1 = y;
   }
   //------------------------------------------------------------------------------
-  public void set2(float x,float y){
+  void set2(float x,float y){
     x2 = x;
     y2 = y;
   }
   //------------------------------------------------------------------------------
-  public int whichSideY(float x,float y){
+  int whichSideY(float x,float y){
     //get the slope - M in y=mx+b
     float m = (y2-y1)/(x2-x1);
     float b = y1 - m*x1;
@@ -952,7 +983,7 @@ class Line {
     }
   }
   //------------------------------------------------------------------------------
-  public int fixDirection(){
+  int fixDirection(){
     //this makes sure that x1 is always the smallest of the pair.
     //swap everyone
     int swapReport=0;
@@ -972,11 +1003,10 @@ class Line {
 
     //also fix verticality.
     if(x1==x2){
-      x1+=0.1f;
+      x1+=0.1;
     }
     return swapReport;
   }
 
 
-}
 }
